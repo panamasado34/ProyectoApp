@@ -1,5 +1,6 @@
 package cl.duoc.educacional.controller;
 
+import cl.duoc.educacional.dto.BitacoraEdicionRequest;
 import cl.duoc.educacional.dto.InformeMensualResponse;
 import cl.duoc.educacional.dto.ParticipacionResponse;
 import cl.duoc.educacional.model.Bitacora;
@@ -58,6 +59,15 @@ public class BitacoraController {
     @PutMapping("/{id}/cerrar")
     public ResponseEntity<Bitacora> cerrar(@PathVariable Long id, @RequestParam String docente) {
         return ResponseEntity.ok(bitacoraService.cerrar(id, docente));
+    }
+
+    // PUT: Editar bitacora en borrador (/bitacoras/1?docente=docente1)
+    @PutMapping("/{id}")
+    public ResponseEntity<Bitacora> editar(
+            @PathVariable Long id,
+            @RequestParam String docente,
+            @RequestBody BitacoraEdicionRequest req) {
+        return ResponseEntity.ok(bitacoraService.editar(id, docente, req));
     }
 
     // 7. GET: Indicadores de participacion (solo docente responsable)

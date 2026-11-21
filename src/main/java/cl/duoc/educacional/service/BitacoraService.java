@@ -1,5 +1,6 @@
 package cl.duoc.educacional.service;
 
+import cl.duoc.educacional.dto.BitacoraEdicionRequest;
 import cl.duoc.educacional.model.Bitacora;
 import cl.duoc.educacional.model.Estudiante;
 import cl.duoc.educacional.repository.AsignacionRepository;
@@ -95,6 +96,24 @@ public class BitacoraService {
         }
         b.setEstado(CERRADA);
         b.setFechaCierre(Utilidades.fechaHoy());
+        return bitacoraRepository.save(b);
+    }
+
+    // 7. Editar (solo en borrador)
+    public Bitacora editar(Long id, String docente, BitacoraEdicionRequest req) {
+        Bitacora b = obtenerDeDocente(id, docente);
+        if (!BORRADOR.equals(b.getEstado())) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Solo se puede editar una bitacora en borrador");
+        }
+        Utilidades.requerido(req.titulo(), "titulo");
+        Utilidades.requerido(req.proposito(), "proposito");
+        Utilidades.requerido(req.instrucciones(), "instrucciones");
+        Utilidades.requerido(req.preguntas(), "preguntas");
+
+        b.setTitulo(req.titulo());
+        b.setProposito(req.proposito());
+        b.setInstrucciones(req.instrucciones());
+        b.setPreguntas(req.preguntas());
         return bitacoraRepository.save(b);
     }
 
